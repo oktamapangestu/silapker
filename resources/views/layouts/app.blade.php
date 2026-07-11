@@ -47,7 +47,8 @@
                 <div class="flex items-center gap-3">
                     <div class="hidden sm:flex flex-col items-end leading-tight">
                         <span class="text-sm font-medium text-slate-800">{{ $pengguna['karyawan']['nama_lengkap'] }}</span>
-                        <span class="text-xs text-slate-500">{{ ucfirst($pengguna['akses']['role']['nama_role']) }}</span>
+                        <span class="text-xs text-slate-500">{{ $pengguna['karyawan']['jabatan'] ?? '-' }} &middot; {{ $pengguna['karyawan']['departemen'] ?? '-' }}</span>
+                        <span class="text-xs text-slate-400">NIP {{ $pengguna['karyawan']['nip'] ?? '-' }}</span>
                     </div>
                     <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-white text-sm font-semibold">
                         {{ $initial }}

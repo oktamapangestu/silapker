@@ -40,7 +40,8 @@
                 <div class="flex justify-between items-start gap-4">
                     <div class="min-w-0">
                         <p class="font-medium text-slate-900">{{ $item->nama_pegawai }}</p>
-                        <p class="text-sm text-slate-500 mt-0.5">{{ $item->waktu_lapor->translatedFormat('d M Y, H:i') }} &middot; {{ $item->jabatan }}</p>
+                        <p class="text-sm text-slate-500 mt-0.5">NIP {{ $item->nip }} &middot; {{ $item->departemen }} &middot; {{ $item->jabatan }}</p>
+                        <p class="text-xs text-slate-400 mt-0.5">{{ $item->waktu_lapor->translatedFormat('d M Y, H:i') }}</p>
                         <p class="mt-1.5 text-sm text-slate-600 truncate">{{ strip_tags($item->keterangan) }}</p>
                     </div>
                     <x-status-badge :status="$item->status" />
