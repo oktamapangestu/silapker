@@ -12,6 +12,7 @@ Route::middleware('auth.central')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::redirect('/', '/laporan');
+    Route::get('laporan/tanggal-tersedia', [LaporanKerjaController::class, 'tanggalTersedia'])->name('laporan.tanggal-tersedia');
     Route::resource('laporan', LaporanKerjaController::class)->except(['show']);
 
     Route::prefix('admin')->name('admin.')->middleware('admin.only')->group(function () {

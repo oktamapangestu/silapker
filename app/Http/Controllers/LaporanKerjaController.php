@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\LaporanKerja;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -13,12 +15,30 @@ class LaporanKerjaController extends Controller
     public function index(Request $request): View
     {
         $karyawan = $request->session()->get('pengguna.karyawan');
+        $tanggal = $request->date('tanggal')?->toDateString() ?? now()->toDateString();
 
         $laporan = LaporanKerja::milikPegawai($karyawan['id'])
+            ->whereDate('waktu_lapor', $tanggal)
             ->latest('waktu_lapor')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('laporan.index', compact('laporan'));
+        return view('laporan.index', compact('laporan', 'tanggal'));
+    }
+
+    public function tanggalTersedia(Request $request): JsonResponse
+    {
+        $karyawan = $request->session()->get('pengguna.karyawan');
+        $bulan = Carbon::parse($request->query('bulan', now()->format('Y-m')).'-01');
+
+        $tanggal = LaporanKerja::milikPegawai($karyawan['id'])
+            ->whereBetween('waktu_lapor', [$bulan->copy()->startOfMonth(), $bulan->copy()->endOfMonth()])
+            ->get()
+            ->map(fn (LaporanKerja $item) => $item->waktu_lapor->toDateString())
+            ->unique()
+            ->values();
+
+        return response()->json(['tanggal_ada_laporan' => $tanggal]);
     }
 
     public function create(): View
