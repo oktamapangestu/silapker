@@ -1,1 +1,3 @@
 import './date-picker';
+import './quill-editor';
+import './foto-preview';

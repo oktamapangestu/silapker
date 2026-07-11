@@ -15,6 +15,7 @@ class LaporanKerja extends Model
     ];
 
     protected $casts = [
+        'foto' => 'array',
         'waktu_lapor' => 'datetime',
         'reviewed_at' => 'datetime',
     ];
@@ -29,8 +30,8 @@ class LaporanKerja extends Model
         return $this->status === 'menunggu' && $this->waktu_lapor->isToday();
     }
 
-    protected function fotoUrl(): Attribute
+    protected function fotoUrls(): Attribute
     {
-        return Attribute::get(fn () => Storage::url($this->foto));
+        return Attribute::get(fn () => collect($this->foto)->map(fn ($path) => Storage::url($path)));
     }
 }

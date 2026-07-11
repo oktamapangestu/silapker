@@ -61,12 +61,18 @@
                         <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">
                             {{ $item->waktu_lapor->translatedFormat('d M Y, H:i') }}
                         </p>
-                        <p class="mt-1.5 text-slate-800 leading-relaxed">{{ $item->keterangan }}</p>
+                        <div class="mt-1.5 text-slate-800 leading-relaxed keterangan-content">{!! $item->keterangan !!}</div>
                     </div>
                     <x-status-badge :status="$item->status" />
                 </div>
 
-                <img src="{{ $item->foto_url }}" alt="Foto kegiatan" class="mt-4 max-h-56 rounded-lg border border-slate-200 object-cover">
+                <div class="mt-4 flex flex-wrap gap-2">
+                    @foreach ($item->foto_urls as $url)
+                        <a href="{{ $url }}" target="_blank" rel="noopener">
+                            <img src="{{ $url }}" alt="Foto kegiatan" class="h-24 w-24 rounded-lg border border-slate-200 object-cover hover:opacity-90 transition">
+                        </a>
+                    @endforeach
+                </div>
 
                 @if ($item->catatan_admin)
                     <div class="mt-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-sm text-slate-600">

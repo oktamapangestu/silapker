@@ -30,15 +30,23 @@
             </div>
 
             <div>
-                <label for="keterangan" class="block text-sm font-medium text-slate-700 mb-1.5">Keterangan Kegiatan</label>
-                <textarea id="keterangan" name="keterangan" rows="4" required placeholder="Ceritakan kegiatan kerja Anda hari ini..."
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition">{{ old('keterangan') }}</textarea>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Keterangan Kegiatan</label>
+                <div data-quill data-placeholder="Ceritakan kegiatan kerja Anda hari ini...">
+                    <div data-quill-editor style="min-height: 140px;" class="bg-white rounded-b-lg"></div>
+                    <textarea data-quill-input name="keterangan" class="hidden">{{ old('keterangan') }}</textarea>
+                </div>
             </div>
 
-            <div>
-                <label for="foto" class="block text-sm font-medium text-slate-700 mb-1.5">Foto Kegiatan</label>
-                <input type="file" id="foto" name="foto" accept="image/*" required
-                    class="block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+            <div data-foto-picker>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Foto Kegiatan (bisa lebih dari satu)</label>
+                <input type="file" name="foto[]" accept="image/*" multiple required data-foto-input class="hidden">
+                <div class="flex flex-wrap gap-2" data-foto-preview>
+                    <button type="button" data-foto-add
+                        class="h-20 w-20 flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition">
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
+                        <span class="text-xs">Tambah</span>
+                    </button>
+                </div>
             </div>
 
             <div class="flex items-center gap-3 pt-2">

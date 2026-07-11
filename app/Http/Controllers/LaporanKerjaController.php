@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LaporanKerja;
+use App\Support\RichTextSanitizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,17 +50,20 @@ class LaporanKerjaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'keterangan' => 'required|string',
-            'foto' => 'required|image|max:2048',
+            'keterangan' => ['required', 'string', $this->keteranganTidakKosong()],
+            'foto' => 'required|array|min:1',
+            'foto.*' => 'image|max:2048',
         ]);
 
         $karyawan = $request->session()->get('pengguna.karyawan');
 
-        $path = $request->file('foto')->store('laporan', 'public');
+        $paths = collect($request->file('foto'))
+            ->map(fn ($file) => $file->store('laporan', 'public'))
+            ->all();
 
         (new LaporanKerja([
-            'keterangan' => $validated['keterangan'],
-            'foto' => $path,
+            'keterangan' => RichTextSanitizer::clean($validated['keterangan']),
+            'foto' => $paths,
         ]))->forceFill([
             'employee_id_eksternal' => $karyawan['id'],
             'nip' => $karyawan['nip'] ?? null,
@@ -95,17 +99,35 @@ class LaporanKerjaController extends Controller
         }
 
         $validated = $request->validate([
-            'keterangan' => 'required|string',
-            'foto' => 'nullable|image|max:2048',
+            'keterangan' => ['required', 'string', $this->keteranganTidakKosong()],
+            'hapus_foto' => 'array',
+            'hapus_foto.*' => 'string',
+            'foto_baru' => 'array',
+            'foto_baru.*' => 'image|max:2048',
         ]);
 
-        $laporan->keterangan = $validated['keterangan'];
+        $fotoAsli = $laporan->foto;
+        $hapusFoto = $validated['hapus_foto'] ?? [];
 
-        if ($request->hasFile('foto')) {
-            Storage::disk('public')->delete($laporan->foto);
-            $laporan->foto = $request->file('foto')->store('laporan', 'public');
+        $sisaFoto = collect($fotoAsli)->reject(fn ($path) => in_array($path, $hapusFoto, true));
+
+        $fotoBaru = collect($request->file('foto_baru', []))
+            ->map(fn ($file) => $file->store('laporan', 'public'));
+
+        $fotoAkhir = $sisaFoto->concat($fotoBaru)->values();
+
+        if ($fotoAkhir->isEmpty()) {
+            $fotoBaru->each(fn ($path) => Storage::disk('public')->delete($path));
+
+            return back()->withInput()->withErrors(['foto_baru' => 'Laporan harus memiliki minimal 1 foto.']);
         }
 
+        collect($hapusFoto)
+            ->filter(fn ($path) => in_array($path, $fotoAsli, true))
+            ->each(fn ($path) => Storage::disk('public')->delete($path));
+
+        $laporan->keterangan = RichTextSanitizer::clean($validated['keterangan']);
+        $laporan->foto = $fotoAkhir->all();
         $laporan->save();
 
         return redirect()->route('laporan.index')->with('status', 'Laporan berhasil diperbarui.');
@@ -131,5 +153,14 @@ class LaporanKerjaController extends Controller
         $karyawan = $request->session()->get('pengguna.karyawan');
 
         abort_unless($laporan->employee_id_eksternal === $karyawan['id'], 403);
+    }
+
+    private function keteranganTidakKosong(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail): void {
+            if (trim(strip_tags((string) $value)) === '') {
+                $fail('Keterangan kegiatan wajib diisi.');
+            }
+        };
     }
 }

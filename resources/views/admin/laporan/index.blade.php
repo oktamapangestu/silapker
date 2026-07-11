@@ -41,7 +41,7 @@
                     <div class="min-w-0">
                         <p class="font-medium text-slate-900">{{ $item->nama_pegawai }}</p>
                         <p class="text-sm text-slate-500 mt-0.5">{{ $item->waktu_lapor->translatedFormat('d M Y, H:i') }} &middot; {{ $item->jabatan }}</p>
-                        <p class="mt-1.5 text-sm text-slate-600 truncate">{{ $item->keterangan }}</p>
+                        <p class="mt-1.5 text-sm text-slate-600 truncate">{{ strip_tags($item->keterangan) }}</p>
                     </div>
                     <x-status-badge :status="$item->status" />
                 </div>

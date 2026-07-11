@@ -51,8 +51,21 @@ function initLaporanDatePicker() {
         return cache[key];
     }
 
+    function showLoading() {
+        daysContainer.innerHTML = '';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'col-span-7 flex flex-col items-center justify-center gap-2 py-6 text-sm text-slate-500';
+        wrapper.innerHTML = `
+            <span class="h-6 w-6 rounded-full border-2 border-slate-300 border-t-indigo-600 animate-spin"></span>
+            <span>Sedang mengambil data tanggal...</span>
+        `;
+        daysContainer.appendChild(wrapper);
+    }
+
     async function render() {
         label.textContent = `${MONTH_NAMES[viewMonth]} ${viewYear}`;
+        showLoading();
 
         const hasReport = await fetchMonth(viewYear, viewMonth);
         const firstDay = new Date(viewYear, viewMonth, 1).getDay();

@@ -19,8 +19,15 @@
                 <x-status-badge :status="$laporan->status" />
             </div>
 
-            <p class="mt-4 text-slate-800 leading-relaxed">{{ $laporan->keterangan }}</p>
-            <img src="{{ $laporan->foto_url }}" alt="Foto kegiatan" class="mt-4 max-h-[28rem] w-full rounded-lg border border-slate-200 object-cover">
+            <div class="mt-4 text-slate-800 leading-relaxed keterangan-content">{!! $laporan->keterangan !!}</div>
+
+            <div class="mt-4 flex flex-wrap gap-3">
+                @foreach ($laporan->foto_urls as $url)
+                    <a href="{{ $url }}" target="_blank" rel="noopener">
+                        <img src="{{ $url }}" alt="Foto kegiatan" class="h-40 w-40 rounded-lg border border-slate-200 object-cover hover:opacity-90 transition">
+                    </a>
+                @endforeach
+            </div>
 
             @if ($laporan->status !== 'menunggu')
                 <div class="mt-5 rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-600">
