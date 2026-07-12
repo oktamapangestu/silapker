@@ -25,7 +25,7 @@
             </button>
             <input type="hidden" id="date-picker-value" name="tanggal" value="{{ $tanggal }}">
 
-            <div id="date-picker-calendar" class="hidden absolute z-20 mt-2 bg-white border border-slate-200 rounded-xl shadow-lg p-3 w-72">
+            <div id="date-picker-calendar" class="hidden absolute z-20 mt-2 bg-white border border-slate-200 rounded-xl shadow-lg p-3 w-72 max-w-[90vw]">
                 <div class="flex items-center justify-between mb-2 px-1">
                     <button type="button" data-nav="-1" class="h-7 w-7 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-100">
                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 010 1.06L9.06 10l3.73 3.71a.75.75 0 11-1.06 1.06l-4.25-4.25a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0z" clip-rule="evenodd" /></svg>
