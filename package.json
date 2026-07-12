@@ -14,6 +14,7 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
-        "quill": "^2.0.3"
+        "quill": "^2.0.3",
+        "sweetalert2": "^11.26.25"
     }
 }

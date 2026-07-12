@@ -43,7 +43,7 @@
                 <div class="flex flex-wrap gap-3">
                     @foreach ($laporan->foto as $path)
                         <label class="relative block cursor-pointer">
-                            <input type="checkbox" name="hapus_foto[]" value="{{ $path }}" class="peer sr-only">
+                            <input type="checkbox" name="hapus_foto[]" value="{{ $path }}" data-foto-existing class="peer sr-only">
                             <img src="{{ \Illuminate\Support\Facades\Storage::url($path) }}" alt="Foto kegiatan"
                                 class="h-24 w-24 rounded-lg border border-slate-200 object-cover peer-checked:opacity-40 peer-checked:ring-2 peer-checked:ring-rose-500">
                             <span class="pointer-events-none absolute inset-0 hidden items-center justify-center rounded-lg bg-rose-900/40 text-xs font-medium text-white peer-checked:flex">

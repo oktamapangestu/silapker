@@ -39,7 +39,7 @@
 
             <div data-foto-picker>
                 <label class="block text-sm font-medium text-slate-700 mb-1.5">Foto Kegiatan (bisa lebih dari satu)</label>
-                <input type="file" name="foto[]" accept="image/*" multiple required data-foto-input class="hidden">
+                <input type="file" name="foto[]" accept="image/*" multiple data-foto-input class="hidden">
                 <div class="flex flex-wrap gap-2" data-foto-preview>
                     <button type="button" data-foto-add
                         class="h-20 w-20 flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition">

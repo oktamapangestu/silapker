@@ -32,14 +32,8 @@ function initQuillEditors() {
         const form = wrapper.closest('form');
 
         if (form) {
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', () => {
                 textarea.value = quill.root.innerHTML;
-
-                if (quill.getText().trim().length === 0) {
-                    e.preventDefault();
-                    editorEl.classList.add('ring-2', 'ring-rose-500', 'rounded-lg');
-                    quill.focus();
-                }
             });
         }
     });
